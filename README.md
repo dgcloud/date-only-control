@@ -1,33 +1,26 @@
-# Alfresco Share JAR Module - SDK 3
+# Alfresco date-only-control
 
-To run this module use `mvn clean install -DskipTests=true alfresco:run` or `./run.sh` and verify that it 
+An Alfresco Share form control to "fix" problems with date-only properties and daylight saving time. 
 
- * Runs the embedded Tomcat + H2 DB 
- * Runs Alfresco Share
- * Packages both as JAR and AMP assembly
+The problem is described at [serious date/time problems in Alfresco](https://hub.alfresco.com/t5/alfresco-content-services-forum/serious-date-time-problems-in-alfresco/td-p/139647)   
 
-Note. You access Share as follows: http://localhost:8081/share
- 
-Note. You need an Alfresco Platform instance running at http://localhost:8080/alfresco that Share can talk to.
-      Typically you will just kick off a platform-jar module for that.
- 
-# Few things to notice
+What the form control does is to send the time part, even for the date-only properties, using a fixed value (sample below).
 
- * No parent pom
- * WAR assembly is handled by the Alfresco Maven Plugin configuration, if needed
- * Standard JAR packaging and layout
- * Works seamlessly with Eclipse and IntelliJ IDEA
- * JRebel for hot reloading, JRebel maven plugin for generating rebel.xml, agent usage: `MAVEN_OPTS=-Xms256m -Xmx1G -agentpath:/home/martin/apps/jrebel/lib/libjrebel64.so`
- * AMP as an assembly
- * [Configurable Run mojo](https://github.com/Alfresco/alfresco-sdk/blob/sdk-3.0/plugins/alfresco-maven-plugin/src/main/java/org/alfresco/maven/plugin/RunMojo.java) in the `alfresco-maven-plugin`
- * No unit testing/functional tests just yet
- * Resources loaded from META-INF
- * Web Fragment (this includes a sample servlet configured via web fragment)
- 
-# TODO
- 
-  * Abstract assembly into a dependency so we don't have to ship the assembly in the archetype
- 
-   
-  
- 
+# Packaging the project
+
+To package this module use `mvn clean install -DskipTests=true`.
+
+Use the generated amp file to deploy on Share using the alfresco-mmt.jar file as described at [Installing an Alfresco Module Package](https://docs.alfresco.com/community/tasks/amp-install.html)
+
+# How to use it
+
+In order to aply the "fix" for the date properties, simply configure the field with share-config-custom.xml, as the sample below:
+
+```
+<field id="san:dataDe">
+    <control template="/form-controls/date-only.ftl">
+        <control-param name="submitTime">true</control-param>
+        <control-param name="fixedTime">12:00:00.000-00:00</control-param>
+    </control>
+</field>
+```
