@@ -1,0 +1,18 @@
+<alfresco-config>
+
+    <config>
+        <forms>
+            <!-- <default-controls>
+                <type name="d:date" template="/form-controls/date-only.ftl">
+                    <control-param name="submitTime">true</control-param>
+                    <control-param name="fixedTime">12:00:00.000-00:00</control-param>
+                </type>
+            </default-controls> -->
+            
+            <dependencies>
+                <js src="/components/form/date-only-picker.js" />
+            </dependencies>
+        </forms>
+    </config>
+    
+</alfresco-config>
